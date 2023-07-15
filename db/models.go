@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Account struct {
@@ -15,4 +16,14 @@ type Account struct {
 	DisplayName sql.NullString
 	PrivateKey  sql.NullString
 	PublicKey   sql.NullString
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}
+
+type Status struct {
+	ID        int64
+	AccountID int64
+	Text      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

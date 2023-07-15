@@ -22,8 +22,25 @@ func (q *Queries) CreateAccount(ctx context.Context, username string) (sql.Resul
 	return q.db.ExecContext(ctx, createAccount, username)
 }
 
+const createStatus = `-- name: CreateStatus :execresult
+INSERT INTO statuses (
+    account_id, text
+) VALUES(
+    ?, ?
+)
+`
+
+type CreateStatusParams struct {
+	AccountID int64
+	Text      string
+}
+
+func (q *Queries) CreateStatus(ctx context.Context, arg CreateStatusParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createStatus, arg.AccountID, arg.Text)
+}
+
 const getAccount = `-- name: GetAccount :one
-SELECT id, username, domain, display_name, private_key, public_key FROM accounts WHERE id = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at FROM accounts WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
@@ -36,12 +53,14 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 		&i.DisplayName,
 		&i.PrivateKey,
 		&i.PublicKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, domain, display_name, private_key, public_key FROM accounts WHERE username = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at FROM accounts WHERE username = ? LIMIT 1
 `
 
 func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Account, error) {
@@ -54,6 +73,8 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.DisplayName,
 		&i.PrivateKey,
 		&i.PublicKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

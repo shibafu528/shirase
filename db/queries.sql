@@ -10,3 +10,10 @@ INSERT INTO accounts (
 ) VALUES (
     ?
 );
+
+-- name: CreateStatus :execresult
+INSERT INTO statuses (
+    account_id, text
+) VALUES(
+    ?, ?
+)
