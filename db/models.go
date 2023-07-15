@@ -11,6 +11,7 @@ import (
 type Account struct {
 	ID          int64
 	Username    string
+	Domain      sql.NullString
 	DisplayName sql.NullString
 	PrivateKey  sql.NullString
 	PublicKey   sql.NullString

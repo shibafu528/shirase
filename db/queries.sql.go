@@ -23,7 +23,7 @@ func (q *Queries) CreateAccount(ctx context.Context, username string) (sql.Resul
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT id, username, display_name, private_key, public_key FROM accounts WHERE id = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key FROM accounts WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
@@ -32,6 +32,7 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
+		&i.Domain,
 		&i.DisplayName,
 		&i.PrivateKey,
 		&i.PublicKey,
@@ -40,7 +41,7 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, display_name, private_key, public_key FROM accounts WHERE username = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key FROM accounts WHERE username = ? LIMIT 1
 `
 
 func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Account, error) {
@@ -49,6 +50,7 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
+		&i.Domain,
 		&i.DisplayName,
 		&i.PrivateKey,
 		&i.PublicKey,
