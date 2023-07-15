@@ -7,6 +7,7 @@ import (
 
 func WellKnown(r chi.Router) {
 	r.Route("/.well-known", func(r chi.Router) {
+		r.Get("/host-meta", wellknown.HostMetaHandler)
 		r.Get("/webfinger", wellknown.WebFingerHandler)
 	})
 }
