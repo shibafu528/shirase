@@ -9,6 +9,7 @@ import (
 
 	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/apub"
+	"github.com/shibafu528/shirase/db"
 )
 
 type WebFingerResponse struct {
@@ -44,7 +45,7 @@ func WebFingerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, q := shirase.GlobalConfig.DB()
+	_, q := db.Open()
 	a, err := q.GetAccountByUsername(r.Context(), acct.Username())
 	if errors.Is(err, sql.ErrNoRows) {
 		w.Header().Set("Content-Type", "application/json")

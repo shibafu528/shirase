@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/db"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +19,7 @@ var createCmd = &cobra.Command{
 		}
 		text := args[1]
 
-		_, q := shirase.GlobalConfig.DB()
+		_, q := db.Open()
 		account, err := q.GetAccount(cmd.Context(), aid)
 		if err != nil {
 			panic(err)

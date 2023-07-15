@@ -14,8 +14,8 @@ type Account struct {
 	Username    string
 	Domain      sql.NullString
 	DisplayName sql.NullString
-	PrivateKey  sql.NullString
-	PublicKey   sql.NullString
+	PrivateKey  string
+	PublicKey   string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

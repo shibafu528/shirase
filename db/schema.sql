@@ -3,8 +3,8 @@ CREATE TABLE accounts (
     username TEXT NOT NULL,
     domain TEXT,
     display_name TEXT,
-    private_key TEXT,
-    public_key TEXT,
+    private_key TEXT NOT NULL,
+    public_key TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

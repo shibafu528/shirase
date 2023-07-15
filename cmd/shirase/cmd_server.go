@@ -24,6 +24,7 @@ var serverCmd = &cobra.Command{
 		r := chi.NewRouter()
 		r.Use(middleware.Recoverer)
 		r.Use(middleware.Logger)
+		r.Group(router.ActivityPub)
 		r.Group(router.WellKnown)
 		s := &http.Server{
 			Addr:    shirase.GlobalConfig.HttpListenAddr(),
