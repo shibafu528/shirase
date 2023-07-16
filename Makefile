@@ -5,3 +5,7 @@ dev:
 .PHONY: gen
 gen:
 	sqlc generate
+
+.PHONY: migrate
+migrate:
+	dbmate migrate
