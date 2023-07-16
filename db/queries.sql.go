@@ -12,14 +12,20 @@ import (
 
 const createAccount = `-- name: CreateAccount :execresult
 INSERT INTO accounts (
-    username
+    username, private_key, public_key
 ) VALUES (
-    ?
+    ?, ?, ?
 )
 `
 
-func (q *Queries) CreateAccount(ctx context.Context, username string) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createAccount, username)
+type CreateAccountParams struct {
+	Username   string
+	PrivateKey string
+	PublicKey  string
+}
+
+func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createAccount, arg.Username, arg.PrivateKey, arg.PublicKey)
 }
 
 const createStatus = `-- name: CreateStatus :execresult

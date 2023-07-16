@@ -6,9 +6,9 @@ SELECT * FROM accounts WHERE username = ? LIMIT 1;
 
 -- name: CreateAccount :execresult
 INSERT INTO accounts (
-    username
+    username, private_key, public_key
 ) VALUES (
-    ?
+    ?, ?, ?
 );
 
 -- name: CreateStatus :execresult

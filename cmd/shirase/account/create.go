@@ -3,6 +3,7 @@ package account
 import (
 	"fmt"
 
+	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/db"
 	"github.com/spf13/cobra"
 )
@@ -13,7 +14,15 @@ var createCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		_, q := db.Open()
-		res, err := q.CreateAccount(cmd.Context(), args[0])
+		key, err := shirase.NewKeyPair()
+		if err != nil {
+			panic(err)
+		}
+		res, err := q.CreateAccount(cmd.Context(), db.CreateAccountParams{
+			Username:   args[0],
+			PrivateKey: string(key.PrivateKey),
+			PublicKey:  string(key.PublicKey),
+		})
 		if err != nil {
 			panic(err)
 		}
