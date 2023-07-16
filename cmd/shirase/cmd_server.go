@@ -9,8 +9,6 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/router"
 	"github.com/spf13/cobra"
@@ -21,14 +19,9 @@ var serverCmd = &cobra.Command{
 	Short: "Run http server",
 	Run: func(cmd *cobra.Command, args []string) {
 		// construct http server
-		r := chi.NewRouter()
-		r.Use(middleware.Recoverer)
-		r.Use(middleware.Logger)
-		r.Group(router.ActivityPub)
-		r.Group(router.WellKnown)
 		s := &http.Server{
 			Addr:    shirase.GlobalConfig.HttpListenAddr(),
-			Handler: r,
+			Handler: router.New(),
 		}
 
 		// handle SIGINT, SIGTERM
