@@ -11,7 +11,7 @@ import (
 	"github.com/shibafu528/shirase/db"
 )
 
-func ActorHandler(w http.ResponseWriter, r *http.Request) {
+func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	if username == "" {
 		w.Header().Set("Content-Type", "application/json")

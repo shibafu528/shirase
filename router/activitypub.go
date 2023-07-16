@@ -6,7 +6,7 @@ import (
 )
 
 func ActivityPub(r chi.Router) {
-	r.Route("/users", func(r chi.Router) {
-		r.Get("/{username}", activitypub.ActorHandler)
+	r.Route("/users/{username}", func(r chi.Router) {
+		r.Get("/", activitypub.GetPersonHandler)
 	})
 }
