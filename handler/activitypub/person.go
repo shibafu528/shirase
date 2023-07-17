@@ -21,7 +21,7 @@ func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, q := db.Open()
-	a, err := q.GetAccountByUsername(r.Context(), username)
+	a, err := q.GetAccountByActivityPubID(r.Context(), sql.NullString{String: username, Valid: true})
 	if errors.Is(err, sql.ErrNoRows) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)

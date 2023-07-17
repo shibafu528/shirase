@@ -12,20 +12,26 @@ import (
 
 const createAccount = `-- name: CreateAccount :execresult
 INSERT INTO accounts (
-    username, private_key, public_key
+    username, activity_pub_id, private_key, public_key
 ) VALUES (
-    ?, ?, ?
+    ?, ?, ?, ?
 )
 `
 
 type CreateAccountParams struct {
-	Username   string
-	PrivateKey string
-	PublicKey  string
+	Username      string
+	ActivityPubID sql.NullString
+	PrivateKey    string
+	PublicKey     string
 }
 
 func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createAccount, arg.Username, arg.PrivateKey, arg.PublicKey)
+	return q.db.ExecContext(ctx, createAccount,
+		arg.Username,
+		arg.ActivityPubID,
+		arg.PrivateKey,
+		arg.PublicKey,
+	)
 }
 
 const createStatus = `-- name: CreateStatus :execresult
@@ -46,7 +52,7 @@ func (q *Queries) CreateStatus(ctx context.Context, arg CreateStatusParams) (sql
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at FROM accounts WHERE id = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
@@ -61,12 +67,34 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 		&i.PublicKey,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ActivityPubID,
+	)
+	return i, err
+}
+
+const getAccountByActivityPubID = `-- name: GetAccountByActivityPubID :one
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE activity_pub_id = ? LIMIT 1
+`
+
+func (q *Queries) GetAccountByActivityPubID(ctx context.Context, activityPubID sql.NullString) (Account, error) {
+	row := q.db.QueryRowContext(ctx, getAccountByActivityPubID, activityPubID)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Domain,
+		&i.DisplayName,
+		&i.PrivateKey,
+		&i.PublicKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ActivityPubID,
 	)
 	return i, err
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at FROM accounts WHERE username = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE username = ? LIMIT 1
 `
 
 func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Account, error) {
@@ -81,6 +109,7 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.PublicKey,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ActivityPubID,
 	)
 	return i, err
 }

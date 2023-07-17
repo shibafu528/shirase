@@ -10,14 +10,15 @@ import (
 )
 
 type Account struct {
-	ID          int64
-	Username    string
-	Domain      sql.NullString
-	DisplayName sql.NullString
-	PrivateKey  string
-	PublicKey   string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID            int64
+	Username      string
+	Domain        sql.NullString
+	DisplayName   sql.NullString
+	PrivateKey    string
+	PublicKey     string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	ActivityPubID sql.NullString
 }
 
 type Status struct {

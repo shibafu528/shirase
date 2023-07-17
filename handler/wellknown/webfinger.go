@@ -62,7 +62,7 @@ func WebFingerHandler(w http.ResponseWriter, r *http.Request) {
 	resp := WebFingerResponse{
 		Subject: "acct:" + a.Username + "@" + shirase.GlobalConfig.LocalDomain,
 		Links: []WebFingerLink{
-			{Rel: "self", Type: "application/activity+json", Href: shirase.GlobalConfig.URLBase().JoinPath("users", a.Username).String()},
+			{Rel: "self", Type: "application/activity+json", Href: a.ActorEndpointURL().String()},
 		},
 	}
 

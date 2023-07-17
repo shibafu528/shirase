@@ -1,6 +1,7 @@
 package account
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/shibafu528/shirase"
@@ -19,9 +20,10 @@ var createCmd = &cobra.Command{
 			panic(err)
 		}
 		res, err := q.CreateAccount(cmd.Context(), db.CreateAccountParams{
-			Username:   args[0],
-			PrivateKey: string(key.PrivateKey),
-			PublicKey:  string(key.PublicKey),
+			Username:      args[0],
+			ActivityPubID: sql.NullString{String: args[0], Valid: true},
+			PrivateKey:    string(key.PrivateKey),
+			PublicKey:     string(key.PublicKey),
 		})
 		if err != nil {
 			panic(err)
