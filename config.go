@@ -3,8 +3,6 @@ package shirase
 import (
 	"fmt"
 	"net/url"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 // TODO: DIしてぇ〜〜〜〜〜!!!!!!!!
