@@ -8,6 +8,9 @@ end_of_line = lf
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[{Makefile,go.mod,go.sum,*.go}]
+indent_style = tab
+
 [*.md]
 trim_trailing_whitespace = false
 
