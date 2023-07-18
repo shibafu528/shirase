@@ -8,5 +8,7 @@ import (
 func ActivityPub(r chi.Router) {
 	r.Route("/users/{username}", func(r chi.Router) {
 		r.Get("/", activitypub.GetPersonHandler)
+		r.Post("/inbox", activitypub.PostInboxHandler)
+		r.Get("/outbox", activitypub.GetOutboxHandler)
 	})
 }
