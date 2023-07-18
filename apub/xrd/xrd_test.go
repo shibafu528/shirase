@@ -21,7 +21,6 @@ func TestNewHostMeta(t *testing.T) {
 		Links: []Link{
 			{
 				Rel:      "lrdd",
-				Type:     "application/xrd+xml",
 				Template: "http://localhost/.well-known/webfinger?resource={uri}",
 			},
 		},
@@ -33,5 +32,5 @@ func TestNewHostMeta(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, `<?xml version="1.0" encoding="UTF-8"?>
-<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0"><Link rel="lrdd" type="application/xrd+xml" template="http://localhost/.well-known/webfinger?resource={uri}"></Link></XRD>`, buf.String())
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0"><Link rel="lrdd" template="http://localhost/.well-known/webfinger?resource={uri}"></Link></XRD>`, buf.String())
 }

@@ -14,7 +14,6 @@ type XRD struct {
 type Link struct {
 	XMLName  xml.Name `xml:"Link"`
 	Rel      string   `xml:"rel,attr"`
-	Type     string   `xml:"type,attr"`
 	Template string   `xml:"template,attr"`
 }
 
@@ -24,7 +23,6 @@ func NewHostMeta(base *url.URL) *XRD {
 		Links: []Link{
 			{
 				Rel:      "lrdd",
-				Type:     "application/xrd+xml",
 				Template: base.JoinPath(".well-known/webfinger").String() + "?resource={uri}",
 			},
 		},
