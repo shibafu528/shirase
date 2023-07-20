@@ -3,6 +3,7 @@ module github.com/shibafu528/shirase
 go 1.20
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-chi/chi/v5 v5.0.10 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

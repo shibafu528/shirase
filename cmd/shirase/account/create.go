@@ -19,9 +19,13 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
+		snowflakeID, err := shirase.GenerateSnowflakeID()
+		if err != nil {
+			panic(err)
+		}
 		res, err := q.CreateAccount(cmd.Context(), db.CreateAccountParams{
 			Username:      args[0],
-			ActivityPubID: sql.NullString{String: args[0], Valid: true},
+			ActivityPubID: sql.NullString{String: snowflakeID.Base32(), Valid: true},
 			PrivateKey:    string(key.PrivateKey),
 			PublicKey:     string(key.PublicKey),
 		})
