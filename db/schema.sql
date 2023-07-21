@@ -19,9 +19,11 @@ CREATE TABLE statuses
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+CREATE UNIQUE INDEX accounts_activity_pub_id ON accounts(activity_pub_id);
 -- Dbmate schema migrations
 INSERT INTO "schema_migrations" (version) VALUES
   ('20230716124959'),
   ('20230716125041'),
   ('20230717150225'),
-  ('20230721180710');
+  ('20230721180710'),
+  ('20230721181530');
