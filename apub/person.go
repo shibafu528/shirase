@@ -4,9 +4,11 @@ type Person struct {
 	Context           []string `json:"@context,omitempty"`
 	ID                string   `json:"id"`
 	Type              string   `json:"type"`
-	PreferredUsername string   `json:"preferredUsername,omitempty"`
 	Inbox             string   `json:"inbox"`
 	Outbox            string   `json:"outbox"`
+	PreferredUsername string   `json:"preferredUsername"`
+	Name              string   `json:"name"`
+	Summary           string   `json:"summary,omitempty"`
 	//Discoverable      bool      `json:"discoverable"`
 	PublicKey PublicKey `json:"publicKey"`
 }

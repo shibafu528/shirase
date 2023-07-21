@@ -25,9 +25,11 @@ func (a *Account) ActivityPubPerson() *apub.Person {
 		Context:           []string{"https://www.w3.org/ns/activitystreams", "https://w3id.org/security/v1"},
 		ID:                actorEndpoint.String(),
 		Type:              "Person",
-		PreferredUsername: a.Username,
 		Inbox:             actorEndpoint.JoinPath("inbox").String(),
 		Outbox:            actorEndpoint.JoinPath("outbox").String(),
+		PreferredUsername: a.Username,
+		Name:              a.DisplayName.String,
+		Summary:           a.Description.String,
 		PublicKey: apub.PublicKey{
 			ID:           actorEndpoint.String() + "#main-key",
 			Owner:        actorEndpoint.String(),
