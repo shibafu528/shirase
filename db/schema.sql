@@ -9,7 +9,7 @@ CREATE TABLE accounts
     public_key   TEXT      NOT NULL,
     created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-, activity_pub_id TEXT);
+, activity_pub_id TEXT, description TEXT);
 CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE statuses
 (
@@ -23,4 +23,5 @@ CREATE TABLE statuses
 INSERT INTO "schema_migrations" (version) VALUES
   ('20230716124959'),
   ('20230716125041'),
-  ('20230717150225');
+  ('20230717150225'),
+  ('20230721180710');

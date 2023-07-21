@@ -52,7 +52,7 @@ func (q *Queries) CreateStatus(ctx context.Context, arg CreateStatusParams) (sql
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE id = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id, description FROM accounts WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
@@ -68,12 +68,13 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.ActivityPubID,
+		&i.Description,
 	)
 	return i, err
 }
 
 const getAccountByActivityPubID = `-- name: GetAccountByActivityPubID :one
-SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE activity_pub_id = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id, description FROM accounts WHERE activity_pub_id = ? LIMIT 1
 `
 
 func (q *Queries) GetAccountByActivityPubID(ctx context.Context, activityPubID sql.NullString) (Account, error) {
@@ -89,12 +90,13 @@ func (q *Queries) GetAccountByActivityPubID(ctx context.Context, activityPubID s
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.ActivityPubID,
+		&i.Description,
 	)
 	return i, err
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id FROM accounts WHERE username = ? LIMIT 1
+SELECT id, username, domain, display_name, private_key, public_key, created_at, updated_at, activity_pub_id, description FROM accounts WHERE username = ? LIMIT 1
 `
 
 func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Account, error) {
@@ -110,6 +112,7 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.ActivityPubID,
+		&i.Description,
 	)
 	return i, err
 }

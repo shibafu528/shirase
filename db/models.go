@@ -19,6 +19,7 @@ type Account struct {
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 	ActivityPubID sql.NullString
+	Description   sql.NullString
 }
 
 type Status struct {
