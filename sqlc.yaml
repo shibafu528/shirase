@@ -7,3 +7,4 @@ sql:
       go:
         package: "db"
         out: "db"
+    strict_order_by: false

@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createAccount = `-- name: CreateAccount :execresult
@@ -115,4 +116,65 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.Description,
 	)
 	return i, err
+}
+
+const getAccountIDByActivityPubID = `-- name: GetAccountIDByActivityPubID :one
+SELECT id FROM accounts WHERE activity_pub_id = ? LIMIT 1
+`
+
+func (q *Queries) GetAccountIDByActivityPubID(ctx context.Context, activityPubID sql.NullString) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getAccountIDByActivityPubID, activityPubID)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getStatusesByAccountID = `-- name: GetStatusesByAccountID :many
+SELECT
+    s.id,
+    s.account_id,
+    s.text,
+    s.created_at,
+    s.updated_at,
+    coalesce(a.activity_pub_id, a.username) activity_pub_id
+FROM statuses s INNER JOIN accounts a ON s.account_id = a.id WHERE s.account_id = ? ORDER BY s.id DESC
+`
+
+type GetStatusesByAccountIDRow struct {
+	ID            int64
+	AccountID     int64
+	Text          string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	ActivityPubID string
+}
+
+func (q *Queries) GetStatusesByAccountID(ctx context.Context, accountID int64) ([]GetStatusesByAccountIDRow, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusesByAccountID, accountID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetStatusesByAccountIDRow
+	for rows.Next() {
+		var i GetStatusesByAccountIDRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.AccountID,
+			&i.Text,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.ActivityPubID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
