@@ -37,19 +37,20 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (s
 
 const createStatus = `-- name: CreateStatus :execresult
 INSERT INTO statuses (
-    account_id, text
+    id, account_id, text
 ) VALUES(
-    ?, ?
+    ?, ?, ?
 )
 `
 
 type CreateStatusParams struct {
+	ID        int64
 	AccountID int64
 	Text      string
 }
 
 func (q *Queries) CreateStatus(ctx context.Context, arg CreateStatusParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createStatus, arg.AccountID, arg.Text)
+	return q.db.ExecContext(ctx, createStatus, arg.ID, arg.AccountID, arg.Text)
 }
 
 const getAccount = `-- name: GetAccount :one

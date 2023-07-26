@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/db"
 	"github.com/spf13/cobra"
 )
@@ -25,7 +26,13 @@ var createCmd = &cobra.Command{
 			panic(err)
 		}
 
+		snowflakeID, err := shirase.GenerateSnowflakeID()
+		if err != nil {
+			panic(err)
+		}
+
 		res, err := q.CreateStatus(cmd.Context(), db.CreateStatusParams{
+			ID:        snowflakeID.Int64(),
 			AccountID: account.ID,
 			Text:      text,
 		})

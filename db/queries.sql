@@ -29,7 +29,7 @@ INSERT INTO accounts (
 
 -- name: CreateStatus :execresult
 INSERT INTO statuses (
-    account_id, text
+    id, account_id, text
 ) VALUES(
-    ?, ?
+    ?, ?, ?
 )
