@@ -18,7 +18,6 @@ type Status struct {
 func (s *Status) ActivityPubActivity() *apub.Activity {
 	actorEndpoint := ActorEndpointByID(s.ActivityPubID)
 	note := s.ActivityPubNote()
-	note.Context = nil
 	return &apub.Activity{
 		Context: []string{"https://www.w3.org/ns/activitystreams"},
 		ID:      actorEndpoint.ActivityEndpoint(s.ID).String(),

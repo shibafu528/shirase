@@ -47,9 +47,7 @@ func GetOutboxHandler(w http.ResponseWriter, r *http.Request) {
 
 	var activities []*apub.Activity
 	for _, s := range statuses {
-		a := s.ActivityPubActivity()
-		a.Context = nil
-		activities = append(activities, a)
+		activities = append(activities, s.ActivityPubActivity())
 	}
 
 	actorEndpoint := entity.ActorEndpointByID(username)
