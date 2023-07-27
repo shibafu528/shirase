@@ -1,7 +1,6 @@
 package wellknown
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +8,7 @@ import (
 
 	"github.com/shibafu528/shirase"
 	"github.com/shibafu528/shirase/apub"
-	"github.com/shibafu528/shirase/db"
+	"github.com/shibafu528/shirase/repo"
 )
 
 type WebFingerResponse struct {
@@ -45,9 +44,8 @@ func WebFingerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, q := db.Open()
-	a, err := q.GetAccountByUsername(r.Context(), acct.Username())
-	if errors.Is(err, sql.ErrNoRows) {
+	a, err := repo.NewAccountRepository().GetAccountByUsername(r.Context(), acct.Username())
+	if errors.Is(err, repo.ErrRecordNotFound) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		w.Write([]byte(fmt.Sprintf("{\"status\": 404, \"error\": \"NOT_FOUND\", \"message\": \"%s\"}", "resource not found")))

@@ -1,7 +1,6 @@
 package activitypub
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/shibafu528/shirase/apub"
-	"github.com/shibafu528/shirase/db"
 	"github.com/shibafu528/shirase/entity"
 	"github.com/shibafu528/shirase/repo"
 )
@@ -23,9 +21,8 @@ func GetOutboxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, q := db.Open()
-	aid, err := q.GetAccountIDByActivityPubID(r.Context(), sql.NullString{String: username, Valid: true})
-	if errors.Is(err, sql.ErrNoRows) {
+	aid, err := repo.NewAccountRepository().GetAccountIDByActivityPubID(r.Context(), username)
+	if errors.Is(err, repo.ErrRecordNotFound) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		w.Write([]byte(fmt.Sprintf("{\"status\": 404, \"error\": \"NOT_FOUND\", \"message\": \"%s\"}", "user not found")))

@@ -1,14 +1,13 @@
 package activitypub
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/shibafu528/shirase/db"
+	"github.com/shibafu528/shirase/repo"
 )
 
 func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,9 +19,8 @@ func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, q := db.Open()
-	a, err := q.GetAccountByActivityPubID(r.Context(), sql.NullString{String: username, Valid: true})
-	if errors.Is(err, sql.ErrNoRows) {
+	a, err := repo.NewAccountRepository().GetAccountByActivityPubID(r.Context(), username)
+	if errors.Is(err, repo.ErrRecordNotFound) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		w.Write([]byte(fmt.Sprintf("{\"status\": 404, \"error\": \"NOT_FOUND\", \"message\": \"%s\"}", "user not found")))
