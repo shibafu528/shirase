@@ -47,7 +47,7 @@ func GetOutboxHandler(w http.ResponseWriter, r *http.Request) {
 		activities = append(activities, s.ActivityPubActivity())
 	}
 
-	actorEndpoint := entity.ActorEndpointByID(username)
+	actorEndpoint := entity.ActorEndpoint(entity.ActivityPubAccountID(username))
 	collection := apub.NewOrderedCollection(actorEndpoint.Outbox().String(), activities)
 
 	w.Header().Set("Content-Type", "application/activity+json")

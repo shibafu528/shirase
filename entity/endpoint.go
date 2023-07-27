@@ -8,39 +8,50 @@ import (
 )
 
 // Actor endpointのURLをラップし、いい感じのヘルパーを提供したりしなかったりする
-type ActorEndpoint struct {
+type ActorEndpointHelper struct {
 	*url.URL
 	ActivityPubID string
 }
 
-func ActorEndpointByID(apid string) ActorEndpoint {
-	return ActorEndpoint{shirase.GlobalConfig.URLBase().JoinPath("users", apid), apid}
+type ActivityPubAccountIDProvider interface {
+	ActivityPubAccountID() string
 }
 
-func (a *ActorEndpoint) ActorPermalink() *url.URL {
+type ActivityPubAccountID string
+
+func (i ActivityPubAccountID) ActivityPubAccountID() string {
+	return string(i)
+}
+
+func ActorEndpoint(id ActivityPubAccountIDProvider) ActorEndpointHelper {
+	apid := id.ActivityPubAccountID()
+	return ActorEndpointHelper{shirase.GlobalConfig.URLBase().JoinPath("users", apid), apid}
+}
+
+func (a *ActorEndpointHelper) ActorPermalink() *url.URL {
 	return shirase.GlobalConfig.URLBase().JoinPath("@" + a.ActivityPubID)
 }
 
-func (a *ActorEndpoint) StatusEndpoint(id int64) *url.URL {
+func (a *ActorEndpointHelper) StatusEndpoint(id int64) *url.URL {
 	return a.JoinPath("statuses", strconv.FormatInt(id, 10))
 }
 
-func (a *ActorEndpoint) StatusPermalink(id int64) *url.URL {
+func (a *ActorEndpointHelper) StatusPermalink(id int64) *url.URL {
 	return a.ActorPermalink().JoinPath(strconv.FormatInt(id, 10))
 }
 
-func (a *ActorEndpoint) ActivityEndpoint(id int64) *url.URL {
+func (a *ActorEndpointHelper) ActivityEndpoint(id int64) *url.URL {
 	return a.JoinPath("statuses", strconv.FormatInt(id, 10), "activity")
 }
 
-func (a *ActorEndpoint) Outbox() *url.URL {
+func (a *ActorEndpointHelper) Outbox() *url.URL {
 	return a.JoinPath("outbox")
 }
 
-func (a *ActorEndpoint) Following() *url.URL {
+func (a *ActorEndpointHelper) Following() *url.URL {
 	return a.JoinPath("following")
 }
 
-func (a *ActorEndpoint) Followers() *url.URL {
+func (a *ActorEndpointHelper) Followers() *url.URL {
 	return a.JoinPath("followers")
 }

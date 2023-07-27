@@ -22,6 +22,14 @@ type Account struct {
 	Description   sql.NullString
 }
 
+func (a *Account) ActivityPubAccountID() string {
+	if a.ActivityPubID.Valid {
+		return a.ActivityPubID.String
+	} else {
+		return a.Username
+	}
+}
+
 func (a *Account) PreferredActivityPubID() string {
 	if a.ActivityPubID.Valid {
 		return a.ActivityPubID.String

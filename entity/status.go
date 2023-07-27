@@ -15,8 +15,12 @@ type Status struct {
 	UpdatedAt     time.Time
 }
 
+func (s *Status) ActivityPubAccountID() string {
+	return s.ActivityPubID
+}
+
 func (s *Status) ActivityPubActivity() *apub.Activity {
-	actorEndpoint := ActorEndpointByID(s.ActivityPubID)
+	actorEndpoint := ActorEndpoint(s)
 	note := s.ActivityPubNote()
 	return &apub.Activity{
 		Context: []string{"https://www.w3.org/ns/activitystreams"},
@@ -30,7 +34,7 @@ func (s *Status) ActivityPubActivity() *apub.Activity {
 }
 
 func (s *Status) ActivityPubNote() *apub.Note {
-	actorEndpoint := ActorEndpointByID(s.ActivityPubID)
+	actorEndpoint := ActorEndpoint(s)
 	return &apub.Note{
 		Context:      []string{"https://www.w3.org/ns/activitystreams"},
 		ID:           actorEndpoint.StatusEndpoint(s.ID).String(),
